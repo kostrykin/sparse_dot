@@ -9,6 +9,24 @@ import numpy as _np
 
 def dot_product_transpose_mkl(matrix_a, cast=False, reorder_output=False, debug=False):
     """
+    Computes the product of sparse matrix with its transpose using the intel Math Kernel Library.
+    This currently only supports float32 and float64 data
+
+    :param matrix_a: Sparse matrix in CSC/CSR format or dense matrix in numpy format
+    :type matrix_a: scipy.sparse.spmatrix, np.ndarray
+    :param cast: Should the data be coerced into float64 if it isn't float32 or float64
+    If set to True and any other dtype is passed, the matrix data will copied internally before multiplication
+    If set to False and any dtype that isn't float32 or float64 is passed, a ValueError will be raised
+    Defaults to False
+    :param reorder_output: Should the array indices be reordered using MKL
+    If set to True, the object in C will be ordered and then exported into python
+    If set to False, the array column indices will not be ordered.
+    The scipy sparse dot product does not yield ordered column indices so this defaults to False
+    :type reorder_output: bool
+    :param debug: Should debug and timing messages be printed. Defaults to false.
+    :type debug: bool
+    :return: Matrix that is the result of A @ A.T in input-dependent format
+    :rtype: scipy.sparse.csr_matrix, scipy.sparse.csc_matrix, np.ndarray
     """
 
     dprint = print if debug else lambda *x: x
@@ -52,7 +70,7 @@ def dot_product_mkl(matrix_a, matrix_b, cast=False, copy=True, reorder_output=Fa
     :type dense: bool
     :param debug: Should debug and timing messages be printed. Defaults to false.
     :type debug: bool
-    :return: Matrix that is the result of A * B in input-dependent format
+    :return: Matrix that is the result of A @ B in input-dependent format
     :rtype: scipy.sparse.csr_matrix, scipy.sparse.csc_matrix, np.ndarray
     """
 
